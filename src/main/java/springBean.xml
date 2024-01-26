@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+    	http://www.springframework.org/schema/context/spring-context.xsd">
+        
+      <context:annotation-config /> <!-- enables all annotations(especially used for to enable deprecated annotation in lifecycle -->
+      <!-- necessary to add "http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd" to xsi:schemaLocation for context:annotation-config to work-->
+ <!-- Setter injection : using property tag -->
+	<bean class="com.learn.spring.setterinjection.Components" name="component1">
+	 <property name="id">
+	 	<value>1234</value>
+	 </property>
+	 <property name="name">
+	 	<value>qwerty</value>
+	 </property>
+	</bean>
+<!-- Setter injection : using value in property tag -->	
+	<bean class="com.learn.spring.setterinjection.Components" name="component2">
+	 <property name="id" value="5678"/>
+	 <property name="name" value="asdf"/>
+	</bean>
+<!-- Setter injection : using p schema -->
+	<bean class="com.learn.spring.setterinjection.Components" name="component3" p:id="90" p:name="zxcv"/>
+<!-- collection injection -->
+	<bean class="com.learn.spring.collectiontypeinjection.Student" name="collection">
+		<property name="name" value="Ananya"/>
+		<property name="subjects">
+			<list>
+				<value>Engineering Mathematics</value>
+				<value>Physical Chemistry</value>
+				<value>Thermodynamics</value>
+			</list>
+		</property>
+		<property name="courseId">
+			<set>
+				<value>EM123</value>
+				<value>PC345</value>
+				<value>TH456</value>
+				<!-- null value -->
+				<null/>
+			</set>
+		</property>
+		<property name="other">
+			<map>
+				<entry key="hostel" value="Vasati"/>
+				<entry key="warden" value="WardenName"/>
+
+			</map>
+		</property>
+		<property name="props">
+			<props>
+				<prop key="email">abcd@yg.com</prop>
+				<prop key="enrollment">12asd56</prop>
+			</props>
+		</property>
+	</bean>
+<!-- Reference type injection -->
+	<bean class="com.learn.spring.referencetypeinjection.B" name="referenceB" p:y="In B"/>
+	<!--  <bean class="com.learn.spring.referencetypeinjection.A" name="reference">
+		<property name="x" value="In A"/>
+		<property name="b"><ref bean="referenceB"/></property>
+		
+		or <property name="b" ref="referenceB"/>
+	</bean> -->
+	<bean class="com.learn.spring.referencetypeinjection.A" name="reference" p:x="In A" p:b-ref="referenceB"/>
+<!-- constructor injection -->
+	<bean class="com.learn.spring.conscructorinjection.Publisher" name="pub">
+		<constructor-arg value="pubName"/>
+	</bean> 
+	<bean class="com.learn.spring.conscructorinjection.Book" name="constructor">
+		<constructor-arg value="Paulo Coelho"/>
+		<constructor-arg value="Alchemist" index="0"/>
+		<constructor-arg value="213" type="int"/>
+		<constructor-arg ref="pub"/>
+		<!-- index=0 used to order parameter --> 
+		<!-- type is not necessary but compiler considers it to be string by default, we can use type if we can specify type to avoid ambiguity-->
+	</bean>
+<!-- Life cycle -->
+	<bean class="com.learn.spring.lifecycle.Samosa" name="lifecycle" init-method="init" destroy-method="destroy" p:price="10"/>
+	<bean class="com.learn.spring.lifecycle.InterfaceSamosa" name="lifecycle1" p:price="10"/>
+	<bean class="com.learn.spring.lifecycle.AnnotationSamosa" name="lifecycle2" p:price="10"/>
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/> <!-- to enable PostConstruct and PreDestroy -->
+<!-- Autowiring -->
+<!-- 	<bean class="com.learn.spring.autowire.Address" name="address" p:state="Maharastra" p:city="Mumbai"/>  
+	<bean class="com.learn.spring.autowire.Employee" name="employee" autowire="byName"/> keep class variable name in class and name of Address bean same, if address name variable is not found, then it is null 
+	<bean class="com.learn.spring.autowire.Employee" name="employee1" autowire="byType"/> checks type/class , if two beans have same time, ioc gets confused 
+	<bean class="com.learn.spring.autowire.Employee" name="employee2" autowire="constructor"/>    commented to run @autowire anno-->
+	<bean class="com.learn.spring.autowire.annotation.anno.Address" name="addressA" p:state="Maharastra" p:city="Mumbai"/>
+	<bean class="com.learn.spring.autowire.annotation.anno.Employee" name="employeeA"/>
+</beans>
